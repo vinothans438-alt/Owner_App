@@ -1,0 +1,66 @@
+name: bakery_owner_app
+description: Bakery Owner Mobile Application for ERP Reports
+publish_to: 'none'
+
+version: 1.0.0+1
+
+# ================= SDK =================
+environment:
+  sdk: ">=3.3.0 <4.0.0"
+
+# ================= DEPENDENCIES =================
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.9
+
+  # UI / DESIGN
+  google_fonts: ^6.2.1
+  fl_chart: ^0.68.0
+
+  # STATE MANAGEMENT
+  provider: ^6.1.2
+
+  # API / NETWORK
+  http: ^1.2.2
+
+  # DATE / FORMAT
+  intl: ^0.19.0
+
+  # LOCAL STORAGE
+  shared_preferences: ^2.2.3
+
+  # FILE EXPORT
+  pdf: ^3.11.0
+  printing: ^5.13.0
+  excel: ^2.1.0
+
+  # FILE SYSTEM
+  path_provider: ^2.1.5
+
+  # SHARE
+  share_plus: ^10.0.0
+
+  # OPEN FILE
+  open_file: ^3.5.10
+
+  # URL LAUNCHER (✅ THIS FIXES YOUR ERROR)
+  url_launcher: ^6.3.0
+
+  # PERMISSIONS
+  permission_handler: ^12.0.1
+
+# ================= DEV DEPENDENCIES =================
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+# ================= FLUTTER CONFIG =================
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/fonts/NotoSans-Regular.ttf
+    - assets/fonts/Roboto-Regular.ttf
