@@ -82,6 +82,7 @@ class AppDrawer extends StatelessWidget {
                     Icons.local_shipping_outlined, '/transport'),
                 _buildMenuItem(
                     context, 'Reports', Icons.description_outlined, '/reports'),
+                _buildMenuItem(context, 'Transfer Report', Icons.swap_horiz_rounded, '/transfer_report'),    
               ],
             ),
           ),
