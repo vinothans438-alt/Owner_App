@@ -552,4 +552,44 @@ class ApiService {
       return false;
     }
   }
+
+  // ================= STOCK BATCH DETAILS =================
+  Future<List<dynamic>> fetchStockBatchDetails({
+    String search = "",
+  }) async {
+    try {
+      final String fullUrl = "$baseUrl/api/available-stock?search=$search";
+
+      debugPrint("🚀 STOCK BATCH API: $fullUrl");
+
+      final response = await http.get(
+        Uri.parse(fullUrl),
+        headers: {
+          "Accept": "application/json",
+        },
+      );
+
+      debugPrint("📡 STATUS: ${response.statusCode}");
+      debugPrint("📦 BODY: ${response.body}");
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+
+        // if API directly returns list
+        if (data is List) {
+          return data;
+        }
+
+        // if API returns {data:[]}
+        if (data is Map<String, dynamic>) {
+          return data['data'] ?? [];
+        }
+      }
+
+      return [];
+    } catch (e) {
+      debugPrint("❌ STOCK BATCH ERROR: $e");
+      return [];
+    }
+  }
 }

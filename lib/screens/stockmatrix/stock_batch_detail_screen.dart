@@ -16,7 +16,7 @@ class StockBatchDetailScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFF4F7FA),
 
-      // ================= APPBAR =================
+      // ================= APP BAR =================
 
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -36,9 +36,8 @@ class StockBatchDetailScreen extends StatelessWidget {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // ================= HEADER CARD =================
+            // ================= HEADER =================
 
             Container(
               width: double.infinity,
@@ -56,9 +55,8 @@ class StockBatchDetailScreen extends StatelessWidget {
                   Text(
                     item['name'] ?? "Unknown Material",
                     style: const TextStyle(
-                      fontSize: 18,
+                      fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black87,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -66,7 +64,7 @@ class StockBatchDetailScreen extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.inventory_2_outlined,
-                        color: Colors.blue.shade600,
+                        color: Colors.blue.shade700,
                         size: 18,
                       ),
                       const SizedBox(width: 6),
@@ -74,7 +72,6 @@ class StockBatchDetailScreen extends StatelessWidget {
                         "Batch Wise Stock Availability",
                         style: TextStyle(
                           color: Colors.grey.shade700,
-                          fontSize: 14,
                         ),
                       ),
                     ],
@@ -85,7 +82,7 @@ class StockBatchDetailScreen extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-            // ================= MATRIX TABLE =================
+            // ================= TABLE =================
 
             Container(
               width: double.infinity,
@@ -96,129 +93,106 @@ class StockBatchDetailScreen extends StatelessWidget {
                   color: Colors.grey.shade200,
                 ),
               ),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Padding(
-                  padding: const EdgeInsets.all(14),
-                  child: DataTable(
-                    headingRowHeight: 58,
-                    dataRowMinHeight: 70,
-                    dataRowMaxHeight: 80,
-                    columnSpacing: 26,
-                    headingRowColor: MaterialStateProperty.all(
-                      Colors.grey.shade100,
-                    ),
-                    columns: const [
-                      DataColumn(
-                        label: Text(
-                          "OLD BATCH",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          "BATCH 1",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          "BATCH 2",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          "BATCH 3",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          "BATCH 4",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          "BATCH 5",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          "TOTAL STOCK",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blue,
-                          ),
-                        ),
-                      ),
-                    ],
-                    rows: [
-                      DataRow(
-                        cells: [
-                          _buildBatchCell(item['old_batch']),
-                          _buildBatchCell(item['batch_1']),
-                          _buildBatchCell(item['batch_2']),
-                          _buildBatchCell(item['batch_3']),
-                          _buildBatchCell(item['batch_4']),
-                          _buildBatchCell(item['batch_5']),
-
-                          // TOTAL STOCK
-
-                          DataCell(
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 10,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.blue.shade50,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Text(
-                                totalQty.toString(),
-                                style: TextStyle(
-                                  color: Colors.blue.shade800,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(18),
+                child: DataTable(
+                  headingRowHeight: 54,
+                  dataRowMinHeight: 60,
+                  columnSpacing: 20,
+                  horizontalMargin: 16,
+                  dividerThickness: 0.5,
+                  headingRowColor: MaterialStateProperty.all(
+                    const Color(0xFFF1F5F9),
                   ),
+                  columns: const [
+                    DataColumn(
+                      label: Text(
+                        "BATCH",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: Text(
+                        "QTY",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: Text(
+                        "STATUS",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                  rows: [
+                    _buildRow("OLD BATCH", item['old_batch']),
+                    _buildRow("BATCH 1", item['batch_1']),
+                    _buildRow("BATCH 2", item['batch_2']),
+                    _buildRow("BATCH 3", item['batch_3']),
+                    _buildRow("BATCH 4", item['batch_4']),
+                    _buildRow("BATCH 5", item['batch_5']),
+                  ],
                 ),
               ),
             ),
 
-            const SizedBox(height: 22),
+            const SizedBox(height: 20),
+
+            // ================= TOTAL STOCK =================
+
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 18,
+              ),
+              decoration: BoxDecoration(
+                color: const Color(0xFFE8F2FF),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: Colors.blue.shade200,
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    "TOTAL STOCK",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  Text(
+                    totalQty.toString(),
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue.shade700,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 20),
 
             // ================= NOTE =================
 
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.all(14),
+              padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: const Color(0xFFFFF8E8),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(14),
                 border: Border.all(
-                  color: Colors.orange.shade200,
+                  color: Colors.orange.shade300,
                 ),
               ),
               child: Row(
@@ -226,7 +200,6 @@ class StockBatchDetailScreen extends StatelessWidget {
                   Icon(
                     Icons.info_outline,
                     color: Colors.orange.shade700,
-                    size: 20,
                   ),
                   const SizedBox(width: 10),
                   Expanded(
@@ -234,7 +207,6 @@ class StockBatchDetailScreen extends StatelessWidget {
                       "Green highlighted batches indicate active stock availability.",
                       style: TextStyle(
                         color: Colors.orange.shade800,
-                        fontSize: 13,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -248,59 +220,61 @@ class StockBatchDetailScreen extends StatelessWidget {
     );
   }
 
-  // ================= BATCH CELL =================
+  // ================= ROW BUILDER =================
 
-  DataCell _buildBatchCell(dynamic value) {
-    final double? val = double.tryParse(value?.toString() ?? "");
+  static DataRow _buildRow(String batchName, dynamic value) {
+    final qty = double.tryParse((value ?? 0).toString()) ?? 0;
 
-    final bool hasStock = val != null && val > 0;
+    final bool hasStock = qty > 0;
 
-    return DataCell(
-      Center(
-        child: hasStock
+    return DataRow(
+      cells: [
+        // BATCH NAME
 
-            // ACTIVE STOCK
+        DataCell(
+          Text(
+            batchName,
+            style: const TextStyle(
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
 
-            ? Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 18,
-                  vertical: 10,
-                ),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFE8F5E9),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Text(
-                  val.toString(),
-                  style: const TextStyle(
-                    color: Color(0xFF2E7D32),
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
-                  ),
-                ),
-              )
+        // QTY
 
-            // EMPTY STOCK
+        DataCell(
+          Text(
+            qty > 0 ? qty.toString() : "-",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: hasStock ? Colors.green.shade700 : Colors.grey,
+            ),
+          ),
+        ),
 
-            : Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 18,
-                  vertical: 10,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade100,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Text(
-                  "-",
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
-                  ),
-                ),
+        // STATUS
+
+        DataCell(
+          Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 14,
+              vertical: 7,
+            ),
+            decoration: BoxDecoration(
+              color: hasStock ? Colors.green.shade50 : Colors.red.shade50,
+              borderRadius: BorderRadius.circular(30),
+            ),
+            child: Text(
+              hasStock ? "AVAILABLE" : "EMPTY",
+              style: TextStyle(
+                color: hasStock ? Colors.green.shade700 : Colors.red.shade700,
+                fontWeight: FontWeight.bold,
+                fontSize: 12,
               ),
-      ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
