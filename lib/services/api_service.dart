@@ -552,4 +552,26 @@ class ApiService {
       return false;
     }
   }
+    // Fetch actual Outlets for the dropdown
+Future<List<Map<String, dynamic>>> fetchLocationList() async {
+  final url = Uri.parse("${AppConstants.baseUrl}/api/locations/list");
+  final data = await _getRequest(url);
+  return List<Map<String, dynamic>>.from(data);
+}
+
+  // Fetch Transfer Report Data
+Future<List<Map<String, dynamic>>> fetchTransferHistoryReport({
+  String? startDate,
+  String? endDate,
+  int? locationId,
+}) async {
+  final url = Uri.parse("${AppConstants.baseUrl}/api/transfer-history-report").replace(queryParameters: {
+    if (startDate != null) "start_date": startDate,
+    if (endDate != null) "end_date": endDate,
+    if (locationId != null) "location_id": locationId.toString(),
+  });
+
+  final data = await _getRequest(url);
+  return List<Map<String, dynamic>>.from(data);
+}
 }
