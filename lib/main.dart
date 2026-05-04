@@ -12,6 +12,7 @@ import 'screens/stockmatrix/stock_matrix_screen.dart';
 import 'screens/accountant_summary/accountant_summary_screen.dart';
 import 'screens/transport/transport_screen.dart';
 import 'screens/reports/reports_screen.dart';
+import 'screens/transfer_history/transfer_history_screen.dart'; 
 
 void main() {
   runApp(const BakeryOwnerApp());
@@ -40,6 +41,7 @@ class BakeryOwnerApp extends StatelessWidget {
         '/accountant_summary': (context) => const AccountantSummaryScreen(),
         '/transport': (context) => const TransportScreen(),
         '/reports': (context) => const ReportsScreen(),
+        '/transfer_report': (context) => const TransferHistoryScreen(),
       },
     );
   }
