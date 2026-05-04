@@ -8,10 +8,42 @@ class StockBatchDetailScreen extends StatelessWidget {
     required this.item,
   }) : super(key: key);
 
+  // ================= GET BATCH LIST =================
+
+  List<Map<String, dynamic>> getBatchList() {
+    final sources = item['all_stock_sources'];
+
+    if (sources is List) {
+      return sources.map<Map<String, dynamic>>((s) {
+        return {
+          "name": (s['batch'] ?? '').toString().toUpperCase(),
+          "qty": double.tryParse(s['qty'].toString()) ?? 0,
+        };
+      }).toList();
+    }
+
+    return [];
+  }
+
+  // ================= TOTAL =================
+
+  double getTotal() {
+    final sources = item['all_stock_sources'];
+    double total = 0;
+
+    if (sources is List) {
+      for (var s in sources) {
+        total += double.tryParse(s['qty'].toString()) ?? 0;
+      }
+    }
+
+    return total;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final double totalQty =
-        double.tryParse((item['quantity'] ?? 0).toString()) ?? 0;
+    final batches = getBatchList();
+    final double totalQty = getTotal();
 
     return Scaffold(
       backgroundColor: const Color(0xFFF4F7FA),
@@ -45,9 +77,7 @@ class StockBatchDetailScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(18),
-                border: Border.all(
-                  color: Colors.grey.shade200,
-                ),
+                border: Border.all(color: Colors.grey.shade200),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,9 +100,7 @@ class StockBatchDetailScreen extends StatelessWidget {
                       const SizedBox(width: 6),
                       Text(
                         "Batch Wise Stock Availability",
-                        style: TextStyle(
-                          color: Colors.grey.shade700,
-                        ),
+                        style: TextStyle(color: Colors.grey.shade700),
                       ),
                     ],
                   ),
@@ -89,15 +117,12 @@ class StockBatchDetailScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(18),
-                border: Border.all(
-                  color: Colors.grey.shade200,
-                ),
+                border: Border.all(color: Colors.grey.shade200),
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(18),
                 child: DataTable(
                   headingRowHeight: 54,
-                  dataRowMinHeight: 60,
                   columnSpacing: 20,
                   horizontalMargin: 16,
                   dividerThickness: 0.5,
@@ -105,39 +130,29 @@ class StockBatchDetailScreen extends StatelessWidget {
                     const Color(0xFFF1F5F9),
                   ),
                   columns: const [
-                    DataColumn(
-                      label: Text(
-                        "BATCH",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    DataColumn(
-                      label: Text(
-                        "QTY",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    DataColumn(
-                      label: Text(
-                        "STATUS",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
+                    DataColumn(label: Text("BATCH")),
+                    DataColumn(label: Text("QTY")),
+                    DataColumn(label: Text("STATUS")),
                   ],
-                  rows: [
-                    _buildRow("OLD BATCH", item['old_batch']),
-                    _buildRow("BATCH 1", item['batch_1']),
-                    _buildRow("BATCH 2", item['batch_2']),
-                    _buildRow("BATCH 3", item['batch_3']),
-                    _buildRow("BATCH 4", item['batch_4']),
-                    _buildRow("BATCH 5", item['batch_5']),
-                  ],
+
+                  // ✅ DYNAMIC ROWS
+
+                  rows: batches.isEmpty
+                      ? [
+                          const DataRow(
+                            cells: [
+                              DataCell(Text("No Data")),
+                              DataCell(Text("-")),
+                              DataCell(Text("-")),
+                            ],
+                          ),
+                        ]
+                      : batches.map((batch) {
+                          return _buildRow(
+                            batch['name'],
+                            batch['qty'],
+                          );
+                        }).toList(),
                 ),
               ),
             ),
@@ -155,9 +170,7 @@ class StockBatchDetailScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 color: const Color(0xFFE8F2FF),
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: Colors.blue.shade200,
-                ),
+                border: Border.all(color: Colors.blue.shade200),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -191,16 +204,11 @@ class StockBatchDetailScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 color: const Color(0xFFFFF8E8),
                 borderRadius: BorderRadius.circular(14),
-                border: Border.all(
-                  color: Colors.orange.shade300,
-                ),
+                border: Border.all(color: Colors.orange.shade300),
               ),
               child: Row(
                 children: [
-                  Icon(
-                    Icons.info_outline,
-                    color: Colors.orange.shade700,
-                  ),
+                  Icon(Icons.info_outline, color: Colors.orange.shade700),
                   const SizedBox(width: 10),
                   Expanded(
                     child: Text(
@@ -224,24 +232,16 @@ class StockBatchDetailScreen extends StatelessWidget {
 
   static DataRow _buildRow(String batchName, dynamic value) {
     final qty = double.tryParse((value ?? 0).toString()) ?? 0;
-
     final bool hasStock = qty > 0;
 
     return DataRow(
       cells: [
-        // BATCH NAME
-
         DataCell(
           Text(
             batchName,
-            style: const TextStyle(
-              fontWeight: FontWeight.w600,
-            ),
+            style: const TextStyle(fontWeight: FontWeight.w600),
           ),
         ),
-
-        // QTY
-
         DataCell(
           Text(
             qty > 0 ? qty.toString() : "-",
@@ -251,14 +251,11 @@ class StockBatchDetailScreen extends StatelessWidget {
             ),
           ),
         ),
-
-        // STATUS
-
         DataCell(
           Container(
             padding: const EdgeInsets.symmetric(
               horizontal: 14,
-              vertical: 7,
+              vertical: 6,
             ),
             decoration: BoxDecoration(
               color: hasStock ? Colors.green.shade50 : Colors.red.shade50,
